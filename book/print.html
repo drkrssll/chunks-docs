@@ -1,0 +1,489 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Chunks-rs Book</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="chapter_2.html"><strong aria-hidden="true">2.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="chapter_3.html"><strong aria-hidden="true">3.</strong> Styling with CSS</a></li><li class="chapter-item expanded "><a href="chapter_4.html"><strong aria-hidden="true">4.</strong> Slabs & Plates</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">The Chunks-rs Book</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p><a href="https://crates.io/crates/chunks-rs"><img src="https://img.shields.io/crates/d/chunks-rs?style=flat-square&amp;color=red" alt="Crates.io" /></a></p>
+<p>Chunks is a wrapper around the GTK4 and GTK4 Layer Shell libraries. It provides a simple API to create widgets and popups for Wayland compositors.</p>
+<h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
+<p>Add the following to your <code>Cargo.toml</code> file.</p>
+<pre><code class="language-toml">[dependencies]
+chunks-rs = "0.5.2"
+</code></pre>
+<p>Alternatively, you could use cargo to add the library.</p>
+<pre><code class="language-sh">cargo add chunks-rs
+</code></pre>
+<blockquote>
+<p>For an extensive list of examples, please refer to <a href="https://github.com/drkrssll/example-chunks">example-chunks</a></p>
+</blockquote>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started-with-chunks-library"><a class="header" href="#getting-started-with-chunks-library">Getting Started with Chunks Library</a></h1>
+<h2 id="initial-setup"><a class="header" href="#initial-setup">Initial Setup</a></h2>
+<p>Begin by creating a new instance of the <code>Factory</code> struct in your main function:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let factory = Factory::new("chunk.factory");
+    // Additional configuration will go here
+}</code></pre></pre>
+<p>The factory instance serves as the foundation for managing your widgets. Next, create a closure to contain your chunks:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let factory = Factory::new("chunk.factory");
+
+    let chunks = |factory: Application| {
+        // Your chunks will be defined here
+    };
+
+    factory.pollute(chunks);
+}</code></pre></pre>
+<h2 id="understanding-chunks"><a class="header" href="#understanding-chunks">Understanding Chunks</a></h2>
+<p>Chunks are the fundamental building blocks of the library. Each chunk represents a widget that can display information on your screen. These widgets are:</p>
+<ul>
+<li>Highly configurable</li>
+<li>Independently updateable</li>
+<li>Positioned using a flexible anchor system</li>
+<li>Capable of displaying both static and dynamic text, as well as images</li>
+</ul>
+<h2 id="creating-your-first-widget-storage-display"><a class="header" href="#creating-your-first-widget-storage-display">Creating Your First Widget: Storage Display</a></h2>
+<p>Let's create a widget that shows system storage usage percentage. We'll break this down into steps:</p>
+<h3 id="1-basic-function-structure"><a class="header" href="#1-basic-function-structure">1. Basic Function Structure</a></h3>
+<p>Create a function that takes a factory reference:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn storage(factory: &amp;Application) {
+    // Widget configuration will go here
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="2-core-configuration"><a class="header" href="#2-core-configuration">2. Core Configuration</a></h3>
+<p>Set up the essential variables for positioning and identifying the widget:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn storage(factory: &amp;Application) {
+    // Create a unique identifier for the widget
+    let tag = tag("storage");
+    
+    // Set the widget's position (top-right corner)
+    let anchors = EdgeConfig::TOP_RIGHT.to_vec();
+    
+    // Define margins from screen edges
+    let margins = vec![
+        (Edge::Top, 20),     // 20 pixels from top
+        (Edge::Right, 160)   // 160 pixels from right
+    ];
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="3-content-update-logic"><a class="header" href="#3-content-update-logic">3. Content Update Logic</a></h3>
+<p>Create a closure that generates the widget's content:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn storage(factory: &amp;Application) {
+    // Previous configuration...
+    
+    let storage_closure = || {
+        // Use Pango Markup for formatted text
+        let text = format!(
+            "&lt;span foreground='#FFFFFF'&gt;{:.0}%&lt;/span&gt;",
+            Internal::get_storage(),
+        );
+        text
+    };
+}
+<span class="boring">}</span></code></pre></pre>
+<blockquote>
+<p>It may seem redundant to use a closure for a text based widget, but this structure allows for dynamic content updates in more complex widgets.</p>
+</blockquote>
+<h3 id="4-update-interval"><a class="header" href="#4-update-interval">4. Update Interval</a></h3>
+<p>Set how often the widget refreshes:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn storage(factory: &amp;Application) {
+    // Previous configuration...
+    
+    // Updates every 120 seconds (default for storage widgets)
+    Internal::update_storage(&amp;tag, storage_closure);
+    
+    // Alternatively, you can set a custom interval:
+    Internal::update_widget(&amp;tag, storage_closure, 120);
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="5-widget-creation"><a class="header" href="#5-widget-creation">5. Widget Creation</a></h3>
+<p>Finally, construct and initialize the widget:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn storage(factory: &amp;Application) {
+    // Previous configuration...
+    
+    Chunk::new(
+        factory.clone(),
+        "Storage".to_string(),  // Widget title
+        tag,
+        margins,
+        anchors,
+        Layer::Bottom          // Widget layer
+    )
+    .build();
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="putting-it-all-together"><a class="header" href="#putting-it-all-together">Putting It All Together</a></h2>
+<p>In your main function, call the storage function within the chunks closure:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let factory = Factory::new("chunk.factory");
+    
+    let chunks = |factory: Application| {
+        storage(&amp;factory);
+        // Add more widgets here as needed
+    };
+    
+    factory.pollute(chunks);
+}</code></pre></pre>
+<h2 id="complete-example"><a class="header" href="#complete-example">Complete Example</a></h2>
+<p>Here's the complete code for reference:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let factory = Factory::new("chunk.factory");
+    
+    let chunks = |factory: Application| {
+        storage(&amp;factory);
+    };
+    
+    factory.pollute(chunks);
+}
+
+fn storage(factory: &amp;Application) {
+    let tag = tag("storage");
+    let anchors = EdgeConfig::TOP_RIGHT.to_vec();
+    let margins = vec![
+        (Edge::Top, 20),
+        (Edge::Right, 160)
+    ];
+    
+    let storage_closure = || {
+        let text = format!(
+            "&lt;span foreground='#FFFFFF'&gt;{:.0}%&lt;/span&gt;",
+            Internal::get_storage(),
+        );
+        text
+    };
+    
+    Internal::update_storage(&amp;tag, storage_closure);
+    
+    Chunk::new(
+        factory.clone(),
+        "Storage".to_string(),
+        tag,
+        margins,
+        anchors,
+        Layer::Bottom
+    )
+    .build();
+}</code></pre></pre>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<p>You've successfully created your first widget using the Chunks library! Experiment with different Internal functions and widget configurations to build more complex displays.</p>
+<p>Continue reading to add CSS styling to your widgets and explore advanced widget types.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="styling-chunks-with-css"><a class="header" href="#styling-chunks-with-css">Styling Chunks with CSS</a></h1>
+<h3 id="setting-up-your-styles"><a class="header" href="#setting-up-your-styles">Setting Up Your Styles</a></h3>
+<p>First, create a constant in your program to hold your CSS definitions:</p>
+<pre><code class="language-plaintext">const STYLE: &amp;str = "
+    /* Base window styles */
+    window {
+        background-color: transparent;
+    }
+
+    /* Storage widget styles */
+    #storage {
+        font-size: 34px;
+        background-color: #000000;
+        color: #FFFFFF;
+    }
+";
+</code></pre>
+<h3 id="notes"><a class="header" href="#notes">Notes</a></h3>
+<ol>
+<li>
+<p><strong>Window Transparency</strong></p>
+<ul>
+<li>The <code>window</code> selector isn't necessary but should be included in your CSS</li>
+<li>Setting <code>background-color: transparent</code> is crucial to ensure that only the Layer Shell remains visible</li>
+</ul>
+</li>
+<li>
+<p><strong>Widget Selectors</strong></p>
+<ul>
+<li>Use ID selectors (#) that match your widget tags</li>
+<li>Example: <code>#storage</code> corresponds to a widget created with <code>tag("storage")</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="applying-the-styles"><a class="header" href="#applying-the-styles">Applying the Styles</a></h3>
+<p>Load your CSS within the chunks closure:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let factory = Factory::new("chunk.factory");
+    
+    let chunks = |factory: Application| {
+        storage(&amp;factory);
+        load_css(STYLE);    // Apply the CSS styles
+    };
+    
+    factory.pollute(chunks);
+}</code></pre></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="slabs--plates"><a class="header" href="#slabs--plates">Slabs &amp; Plates</a></h1>
+<p>Slabs and Plates are popup widgets that display information to the user. They are designed to be temporary and disappear after a set duration.</p>
+<p>Both share the same implementations but differ in their display behavior.</p>
+<p>These widget types do not need a designated layer, as they are set to Overlay by default. Instead of a layer, enter the amount of seconds you would like the Popups to display for.</p>
+<h2 id="slabs"><a class="header" href="#slabs">Slabs</a></h2>
+<p>Display dynamically, triggered by changes in underlying text (e.g., volume detection).</p>
+<pre><code class="language-rs">Slab::new(
+    factory.clone(),
+    "Volume".to_string(),
+    tag,
+    margins,
+    anchors,
+    2,
+)
+.build();
+</code></pre>
+<h2 id="plates"><a class="header" href="#plates">Plates</a></h2>
+<p>Display once at startup, then disappear after a set duration (e.g., welcome messages).</p>
+<pre><code class="language-rs">Plate::new(
+    factory.clone(),
+    "Greeter".to_string(),
+    tag,
+    margins,
+    anchors,
+    2,
+)
+.build();
+</code></pre>
+<p>In an attempt to retain code structure, Slabs and Plates were designed to be as similar as possible to Chunks. They share the same methods and implementations, making them interchangeable.</p>
+<blockquote>
+<p>Once again, for more examples, please refer to <a href="https://github.com/drkrssll/example-chunks">example-chunks</a></p>
+</blockquote>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,7 @@
+[book]
+authors = ["drkrssll"]
+language = "en"
+multilingual = false
+src = "src"
+title = "The Chunks-rs Book"
+
